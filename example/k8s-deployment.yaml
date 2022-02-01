@@ -1,0 +1,66 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: argo-workflow-url-finder
+  labels:
+    app: argo-workflow-url-finder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argo-workflow-url-finder
+  template:
+    metadata:
+      labels:
+        app: argo-workflow-url-finder
+    spec:
+      containers:
+          - name: argo-workflow-url-finder
+            image: ghcr.io/sendible-labs/argo-workflows-url-finder:stable
+            imagePullPolicy: Always
+            ports:
+            - name: http
+              containerPort: 8080
+            env:
+            - name: ARGO_URL
+              value: "https://argo-workflows.sendible.com"
+            - name: ACCESS_TOKEN
+              value: "xxxx"
+            resources:
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: argo-workflow-url-finder
+  labels:
+    app: argo-workflow-url-finder
+spec:
+  selector:
+    app: argo-workflow-url-finder
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argo-workflow-url-finder
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: workflows-url.sendible.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: argo-workflow-url-finder
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - workflows-url.sendible.com
+    secretName: tls.workflows-url.sendible.com
