@@ -1,5 +1,5 @@
 # Argo Workflows URL Finder
-When Argo Workflows archives a workflow, the URL changes, and the URL cannot be pre-determined. If you're using tools such as [The ci-github-notifier](https://github.com/sendible-labs/ci-github-notifier) to annotate results onto Github Pull Requests, this change of URL quickly becomes an issue.
+When Argo Workflows archives a workflow, the URL changes, and the URL cannot be pre-determined. If you're using tools such as [the ci-github-notifier](https://github.com/sendible-labs/ci-github-notifier) to annotate results onto Github Pull Requests, this change of URL quickly becomes an issue.
 
 The Argo Workflows URL Finder simply locates your workflow by querying the Argo Workflows API and redirects the user to the correct URL.
 
