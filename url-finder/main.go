@@ -152,9 +152,9 @@ func urlGetter() {
          fmt.Println("Your workflow name was invalid")
          wrongWorkflow = 1
       } else {
-         finalUrl = os.ExpandEnv("$ARGO_URL") + "archived-workflows/" + namespace + "/" + workflow1.Items[0].Metadata.UID
+         finalUrl = os.ExpandEnv("$ARGO_URL") + "/archived-workflows/" + namespace + "/" + workflow1.Items[0].Metadata.UID
       }  
    } else {
-      finalUrl = os.ExpandEnv("$ARGO_URL") + "workflows/" + namespace + "/" + workflow1.Items[0].Metadata.Name
+      finalUrl = os.ExpandEnv("$ARGO_URL") + "/workflows/" + namespace + "/" + workflow1.Items[0].Metadata.Name
    }
 }
