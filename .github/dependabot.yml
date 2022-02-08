@@ -3,7 +3,7 @@ updates:
 
   # Maintain dependencies for Golang
   - package-ecosystem: "gomod"
-    directory: "/"
+    directory: "/url-finder"
     schedule:
       interval: "daily"
     commit-message:
