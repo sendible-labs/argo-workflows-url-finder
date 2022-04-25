@@ -109,7 +109,7 @@ func urlGetter() {
    if readErr != nil {
       log.Fatalln(readErr)
    }
-   
+   fmt.Println("GET response: " + string(responseData))
    //Create an instance of our struct
    var workflow1 *Workflow
 
@@ -142,6 +142,7 @@ func urlGetter() {
       if readErr != nil {
          log.Fatalln(readErr)
       }
+      fmt.Println("GET response: " + string(responseData))
       var workflow1 *Workflow
       jsonErr := json.Unmarshal(responseData, &workflow1)
       if jsonErr != nil {
