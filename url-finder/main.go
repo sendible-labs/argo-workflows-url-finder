@@ -129,7 +129,7 @@ func urlGetter() {
       if err != nil {
          log.Fatal(err)
       }
-      request.Header.Set("Authorization", os.ExpandEnv("$ARGO_TOKEN"))
+      request.Header.Set("Authorization", getToken(os.Getenv("TOKEN_FILE"), "ACCESS_TOKEN"))
       request.Header.Set("Content-Type", "application/json")
       response, getErr := argoClient.Do(request)
       if err != nil {
