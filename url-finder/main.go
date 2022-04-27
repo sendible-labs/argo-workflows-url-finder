@@ -8,17 +8,26 @@ package main
      "io/ioutil"
      "time"
      "encoding/json"
+     "strings"
  )
 var workflow_name string
 var namespace string
+var workflow_name_input string
+var namespace_input string
 var finalUrl string
 var wrongWorkflow int
 
 func main() {
    //Read the URL of the "workflow" and parse the workflow name and namespace
    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-      namespace = r.URL.Query().Get("namespace")
-      workflow_name = r.URL.Query().Get("workflowname")
+      namespace_input := r.URL.Query().Get("namespace")
+      namespace = strings.Replace(namespace_input, "\n", "", -1)
+      namespace = strings.Replace(namespace, "\r", "", -1)
+
+      workflow_name_input := r.URL.Query().Get("workflowname")
+      workflow_name = strings.Replace(workflow_name_input, "\n", "", -1)
+      workflow_name = strings.Replace(workflow_name, "\r", "", -1)
+
       wrongWorkflow = 0
       if len(workflow_name) == 0 {
          fmt.Println("No value entered for workflow name")
@@ -27,7 +36,8 @@ func main() {
          if wrongWorkflow == 1 {
             fmt.Println("Invalid workflow name")
          } else {
-            fmt.Println(finalUrl)
+            fmt.Println("Workflow Found!")
+            fmt.Println("Redirecting to " + finalUrl)
             http.Redirect(w, r, finalUrl, 302)
          }
       }
@@ -79,7 +89,7 @@ func urlGetter() {
    }
 
    url := os.ExpandEnv("$ARGO_URL") + "/api/v1/workflows/" + namespace + "?listOptions.fieldSelector=metadata.name=" + workflow_name
-   fmt.Println(url)
+   fmt.Println("Checking Argo Workflows for a workflow named \"" + workflow_name + "\" in the \"" + namespace + "\" namespace..." )
    
    //Set up HTTP client object
    argoClient := http.Client{Timeout: 10 * time.Second}
@@ -109,7 +119,6 @@ func urlGetter() {
    if readErr != nil {
       log.Fatalln(readErr)
    }
-   fmt.Println("GET response: " + string(responseData))
    //Create an instance of our struct
    var workflow1 *Workflow
 
@@ -142,15 +151,15 @@ func urlGetter() {
       if readErr != nil {
          log.Fatalln(readErr)
       }
-      fmt.Println("GET response: " + string(responseData))
+
       var workflow1 *Workflow
       jsonErr := json.Unmarshal(responseData, &workflow1)
       if jsonErr != nil {
          log.Fatalln(jsonErr)
       }
       if workflow1.Items == nil {
-         //Workflow name was invalid: Gets redirected to error page
          fmt.Println("Your workflow name was invalid")
+         fmt.Println("HTTP Response: " + string(responseData))
          wrongWorkflow = 1
       } else {
          finalUrl = os.ExpandEnv("$ARGO_URL") + "/archived-workflows/" + namespace + "/" + workflow1.Items[0].Metadata.UID
