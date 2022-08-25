@@ -1,4 +1,4 @@
-# Update August 2022
+# Update August 2022 - Archived Repository
 The issue was fixed in [PR 7854](https://github.com/argoproj/argo-workflows/pull/7854) and will be generally available in Argo Workflows 3.4. Therefore we have no intention on maintaining this repository.
 
 
