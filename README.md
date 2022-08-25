@@ -1,3 +1,10 @@
+# Update August 2022
+The issue was fixed in [PR 7854](https://github.com/argoproj/argo-workflows/pull/7854) and will be generally available in Argo Workflows 3.4. Therefore we have no intention on maintaining this repository.
+
+
+------
+
+
 # Argo Workflows URL Finder
 When Argo Workflows archives a workflow, the URL changes, and the URL cannot be pre-determined. If you're using tools such as [the ci-github-notifier](https://github.com/sendible-labs/ci-github-notifier) to annotate results onto Github Pull Requests, this change of URL quickly becomes an issue.
 
